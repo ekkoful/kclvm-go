@@ -1,4 +1,4 @@
-package convert
+package gogen
 
 import (
 	"bytes"
