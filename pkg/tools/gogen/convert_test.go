@@ -1,7 +1,6 @@
 package convert
 
 import (
-	"fmt"
 	"testing"
 
 	"kusionstack.io/kclvm-go/pkg/kcl"
@@ -13,6 +12,5 @@ func TestConvert(t *testing.T) {
 		t.Fatal(err)
 	}
 	goCode := GenGoCodeFromKclType(result)
-	fmt.Println(goCode)
-	t.Logf("go code: %s", goCode)
+	t.Logf("go code: \n%s", goCode)
 }
