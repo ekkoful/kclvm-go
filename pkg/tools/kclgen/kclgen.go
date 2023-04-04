@@ -28,7 +28,7 @@ func parseGoStruct(s interface{}) GenKclSchema {
 		tagMap := make(map[string]string, 0)
 		s1 := strings.Split(structTag, ",")
 		for _, s := range s1 {
-			s2 := strings.Split(s, ":")
+			s2 := strings.Split(s, "=")
 			tagMap[s2[0]] = s2[1]
 		}
 		kclFieldList = append(kclFieldList, &KclField{

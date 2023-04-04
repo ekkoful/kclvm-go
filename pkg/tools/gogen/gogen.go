@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"go/format"
+	"strings"
 
 	"kusionstack.io/kclvm-go/pkg/logger"
 	"kusionstack.io/kclvm-go/pkg/spec/gpyrpc"
@@ -29,11 +30,11 @@ func parseKclType(ktList []*gpyrpc.KclType) *GenStruct {
 			var schemaList []*Field
 			for k, p := range kt.Properties {
 				var field Field
-				field.Name = k
+				field.Name = strings.ToUpper(k[:1]) + k[1:]
 				switch p.Type {
 				case "schema":
 					field.SchemaType = "*" + p.SchemaName
-					field.Tag = fmt.Sprintf(`kcl:"name:%s,type:%s"`, field.Name, "schema")
+					field.Tag = fmt.Sprintf(`kcl:"name=%s,type=%s"`, k, "schema")
 				case "dict":
 					kType := p.Key.Type
 					if kType == "str" {
@@ -46,26 +47,26 @@ func parseKclType(ktList []*gpyrpc.KclType) *GenStruct {
 						vType = p.Item.SchemaName
 					}
 					field.SchemaType = "map[" + kType + "]" + vType
-					field.Tag = fmt.Sprintf(`kcl:"name:%s,type:%s"`, field.Name, "{"+p.Key.Type+":"+vType+"}")
+					field.Tag = fmt.Sprintf(`kcl:"name=%s,type=%s"`, k, "{"+p.Key.Type+":"+vType+"}")
 				case "list":
 					vType := p.Item.Type
 					if vType == "schema" {
 						vType = p.Item.SchemaName
 					}
 					field.SchemaType = "[]" + "*" + vType
-					field.Tag = fmt.Sprintf(`kcl:"name:%s,type:%s"`, field.Name, "["+vType+"]")
+					field.Tag = fmt.Sprintf(`kcl:"name=%s,type=%s"`, k, "["+vType+"]")
 				case "str":
 					field.SchemaType = "string"
-					field.Tag = fmt.Sprintf(`kcl:"name:%s,type:%s"`, field.Name, "str")
+					field.Tag = fmt.Sprintf(`kcl:"name=%s,type=%s"`, k, "str")
 				case "int":
 					field.SchemaType = "int"
-					field.Tag = fmt.Sprintf(`kcl:"name:%s,type:%s"`, field.Name, "int")
+					field.Tag = fmt.Sprintf(`kcl:"name=%s,type=%s"`, k, "int")
 				case "float":
 					field.SchemaType = "float32"
-					field.Tag = fmt.Sprintf(`kcl:"name:%s,type:%s"`, field.Name, "float")
+					field.Tag = fmt.Sprintf(`kcl:"name=%s,type=%s"`, k, "float")
 				case "bool":
 					field.SchemaType = "bool"
-					field.Tag = fmt.Sprintf(`kcl:"name:%s,type:%s"`, field.Name, "bool")
+					field.Tag = fmt.Sprintf(`kcl:"name=%s,type=%s"`, k, "bool")
 				case "null":
 					field.SchemaType = "nil"
 				}
