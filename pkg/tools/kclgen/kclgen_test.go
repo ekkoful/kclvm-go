@@ -31,7 +31,7 @@ type Company struct {
 	Employees []*employee `kcl:"name=employees,type=[employee]"`
 }
 
-func Test_parseGoStruct(t *testing.T) {
+func TestExample(t *testing.T) {
 	structList := make([]interface{}, 0)
 	structList = append(structList, &user{})
 	structList = append(structList, &Person{})
@@ -40,5 +40,29 @@ func Test_parseGoStruct(t *testing.T) {
 	for _, sl := range structList {
 		s := GenKclSchemaCode(sl)
 		fmt.Println(s)
+	}
+}
+
+func TestGenKclSchemaCode(t *testing.T) {
+	type args struct {
+		s interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			"testUser",
+			args{s: &user{}},
+			"schema user:\n    name: str\n    age: int\n\n",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GenKclSchemaCode(tt.args.s); got != tt.want {
+				t.Errorf("GenKclSchemaCode() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

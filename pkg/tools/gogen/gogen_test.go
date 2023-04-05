@@ -6,7 +6,7 @@ import (
 	"kusionstack.io/kclvm-go/pkg/kcl"
 )
 
-func TestConvert(t *testing.T) {
+func TestExample(t *testing.T) {
 	result, err := kcl.GetSchemaType("./testdata/main.k", "", "")
 	if err != nil {
 		t.Fatal(err)
